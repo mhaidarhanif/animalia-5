@@ -22,6 +22,10 @@ app.get("/animals/:id", (c) => {
 
   const animal = dataAnimals.find((animal) => animal.id === id);
 
+  if (!animal) {
+    return c.json({ message: "Animal not found", id }, 404);
+  }
+
   return c.json(animal);
 });
 
