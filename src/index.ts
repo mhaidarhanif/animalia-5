@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
-import { dataAnimals } from "./data/animals";
+import { type Animal, dataAnimals } from "./data/animals";
 
 const app = new Hono();
 
@@ -25,6 +25,18 @@ app.get("/animals/:id", (c) => {
   if (!animal) {
     return c.json({ message: "Animal not found", id }, 404);
   }
+
+  return c.json(animal);
+});
+
+app.post("/animals", async (c) => {
+  const animal: Animal = await c.req.parseBody();
+
+  if (!animal.name) {
+    return c.json({ message: "Name is required" }, 400);
+  }
+
+  dataAnimals.push(animal);
 
   return c.json(animal);
 });
